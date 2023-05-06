@@ -10,9 +10,9 @@ int main(int argc, char** argv)
 	unsigned int context = 0U;
 	unsigned char verbose = 0;
 
-	unsigned long long size = 0ULL;
 	unsigned long long total_requests = 0ULL;
 	char* input = (char*)0;
+	unsigned long size = 0UL;
 	unsigned long bytes_returned = 0UL;
 	long h_connect_result = 0L;
 	long h_request_result = 0L;
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 			return 1;
 		}
 
-		for (int i = 0; i < size; i++)
+		for (unsigned long i = 0; i < size; i++)
 		{
 			*(char*)(input + i) = rand() % 0xFF;
 		}
