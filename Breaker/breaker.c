@@ -7,7 +7,8 @@ int main(int argc, char** argv)
 	PWCHAR unicode_port_name = (PWCHAR)0;
 	void* h_port = INVALID_HANDLE_VALUE;
 	unsigned long long max_length = 0ULL;
-	unsigned int context = 0U;
+	unsigned long long connection_length = 0ULL;
+	unsigned long long context = 0ULL;
 	unsigned char verbose = 0;
 
 	unsigned long long total_requests = 0ULL;
@@ -22,15 +23,16 @@ int main(int argc, char** argv)
 
 	printf("%s", PREAMBLE);
 
-	if (!argv[1] || !argv[2] || !argv[3] || !argv[4])
+	if (!argv[1] || !argv[2] || !argv[3] || !argv[4] || !argv[5])
 	{
-		printf("[*] Usage: Breaker.exe <Communication Port> <Connection Context> <Maximum Input Length> <Verbose>\n");
+		printf("[*] Usage: Breaker.exe <Communication Port> <Connection Context> <Connection Context Length> <Maximum Input Length> <Verbose>\n");
 		return 1;
 	}
 
-	verbose = atoi(argv[4]);
-	max_length = atoi(argv[3]);
-	context = atoi(argv[2]);
+	verbose = atoi(argv[5]);
+	max_length = atoi(argv[4]);
+	connection_length = atoi(argv[3]);
+	context = _strtoui64(argv[2], 0, 10);
 
 	unicode_port_name = (PWCHAR)malloc(sizeof(WCHAR) * (strlen(argv[1]) + 1));
 	if (!unicode_port_name)
@@ -45,9 +47,9 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	printf("[*] Communication Port: %s\n[*] Connection Context: %s\n[*] Maximum Length: %s\n\n", argv[1], argv[2], argv[3]);
+	printf("[*] Communication Port: %s\n[*] Connection Context: %s\n[*] Connection Context Length: %s\n[*] Maximum Length: %s\n\n", argv[1], argv[2], argv[3], argv[4]);
 
-	h_connect_result = FilterConnectCommunicationPort(unicode_port_name, 0, &context, sizeof(context), 0, &h_port);
+	h_connect_result = FilterConnectCommunicationPort(unicode_port_name, 0, &context, connection_length, 0, &h_port);
 	if (h_connect_result < 0 || h_port == INVALID_HANDLE_VALUE)
 	{
 		printf("[-] Failed to establish a filter connection.\n");
@@ -57,7 +59,7 @@ int main(int argc, char** argv)
 
 	while (1)
 	{
-		size = rand() % max_length;
+		size = rand() % (max_length + 1ULL);
 		input = (char*)malloc(size);
 		if (!input)
 		{
