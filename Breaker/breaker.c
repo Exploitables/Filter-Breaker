@@ -85,9 +85,9 @@ int main(int argc, char** argv)
 		free(input);
 
 		total_requests++;
-		if (!(total_requests % 100000))
+		if (!(total_requests % 1000000))
 		{
-			printf("[*] Total requests sent: %llu\n[*] Total succeeded requests: %llu\n[*] Total failed requests: %llu\n", total_requests, succeeded_requests, failed_requests);
+			printf("[*] Total requests sent: %llu\n[*] Total succeeded requests: %llu\n[*] Total failed requests: %llu\n\n", total_requests, succeeded_requests, failed_requests);
 		}
 	}
 
